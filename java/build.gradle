@@ -1,0 +1,24 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
+}
+
+application {
+    mainClass = 'aeon.tools.ErrorsExport'
+}
+
+tasks.register('exportErrors', JavaExec) {
+    group = 'aeon-tools'
+    description = 'Export Kafka error codes from kafka-clients into a JSON file.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = application.mainClass.get()
+    args = [project.findProperty('outFile') ?: 'errors.json']
+}
+
